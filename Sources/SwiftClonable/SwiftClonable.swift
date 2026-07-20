@@ -23,5 +23,6 @@ public func clonableDeepCopy<T: Hashable>(_ value: Set<T>) -> Set<T> {
 }
 
 
+@attached(member, names: named(isCopy), named(init(copying:)))
 @attached(extension, conformances: Clonable, names: named(copy))
 public macro Clonable() = #externalMacro(module: "SwiftClonableMacros", type: "SwiftClonableMacro")
