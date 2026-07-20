@@ -1,4 +1,4 @@
-public protocol Clonable: AnyObject {
+public protocol Clonable: AnyObject, Sendable {
     func copy() -> Self
 }
 
