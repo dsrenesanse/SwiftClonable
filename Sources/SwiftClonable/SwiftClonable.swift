@@ -1,4 +1,5 @@
 public protocol Clonable: AnyObject, Sendable {
+    var isCopy: Bool { get }
     func copy() -> Self
 }
 
@@ -8,7 +9,10 @@ public func clonableDeepCopy<T>(_ value: T) -> T {
 
 public func clonableDeepCopy<T>(_ value: T?) -> T? {
     guard let value = value else { return nil }
-    return clonableDeepCopy(value)
+    // Explicitly typed as T so this binds to the non-optional overload;
+    // otherwise the call resolves back to this function and recurses forever.
+    let copied: T = clonableDeepCopy(value)
+    return copied
 }
 
 public func clonableDeepCopy<T>(_ value: [T]) -> [T] {
