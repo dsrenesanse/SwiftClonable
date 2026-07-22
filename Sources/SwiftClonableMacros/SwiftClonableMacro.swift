@@ -16,8 +16,6 @@ private struct PropertyInfo {
 
 public struct SwiftClonableMacro: MemberMacro, ExtensionMacro {
 
-    // MARK: - MemberMacro
-
     public static func expansion(
         of node: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,
@@ -30,8 +28,6 @@ public struct SwiftClonableMacro: MemberMacro, ExtensionMacro {
         let className = classDecl.name.text
         let properties = storedProperties(of: classDecl)
 
-        // `let` properties with a default value are initialized at declaration
-        // and cannot be reassigned inside an initializer.
         let assignments = properties
             .filter { !($0.isLet && $0.hasDefault) }
             .map { prop in
@@ -55,8 +51,6 @@ public struct SwiftClonableMacro: MemberMacro, ExtensionMacro {
 
         return [flagDecl, initDecl]
     }
-
-    // MARK: - ExtensionMacro
 
     public static func expansion(
         of node: AttributeSyntax,
@@ -84,8 +78,6 @@ public struct SwiftClonableMacro: MemberMacro, ExtensionMacro {
 
         return [ext]
     }
-
-    // MARK: - Helpers
 
     private static func storedProperties(of classDecl: ClassDeclSyntax) -> [PropertyInfo] {
         let storedVarDecls = classDecl.memberBlock.members

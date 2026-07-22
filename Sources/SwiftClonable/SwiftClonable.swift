@@ -9,20 +9,21 @@ public func clonableDeepCopy<T>(_ value: T) -> T {
 
 public func clonableDeepCopy<T>(_ value: T?) -> T? {
     guard let value = value else { return nil }
-    // Explicitly typed as T so this binds to the non-optional overload;
-    // otherwise the call resolves back to this function and recurses forever.
     let copied: T = clonableDeepCopy(value)
     return copied
 }
 
 public func clonableDeepCopy<T>(_ value: [T]) -> [T] {
+    guard T.self is Clonable.Type else { return value }
     return value.map { clonableDeepCopy($0) }
 }
 public func clonableDeepCopy<K, V>(_ value: [K: V]) -> [K: V] {
+    guard V.self is Clonable.Type else { return value }
     return value.mapValues { clonableDeepCopy($0) }
 }
 
 public func clonableDeepCopy<T: Hashable>(_ value: Set<T>) -> Set<T> {
+    guard T.self is Clonable.Type else { return value }
     return Set(value.map { clonableDeepCopy($0) })
 }
 
